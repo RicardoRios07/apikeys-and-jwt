@@ -1,12 +1,24 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AccountModule } from './account/account.module';
 import { AuthModule } from './auth/auth.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { AuthMiddleware } from './middleware/auth/auth.middleware';
 
 @Module({
-  imports: [AccountModule, AuthModule],
+  imports: [AccountModule, AuthModule,
+  MongooseModule.forRoot("mongodb://127.0.0.1:27017",{
+    dbName:"apik",
+    directConnection:true,
+    serverSelectionTimeoutMS:2000
+  })],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+
+  configure (consumer: MiddlewareConsumer){
+    consumer.apply(AuthMiddleware).forRoutes("");
+  }
+}

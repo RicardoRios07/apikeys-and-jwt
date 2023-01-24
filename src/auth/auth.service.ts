@@ -5,6 +5,11 @@ import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class AuthService {
+    private apiKeys: string[] = [
+        "ca03na188ame03u1d78620de67282882a84",
+        "d2e621a6646a4211768cd68e26f21228a81",
+    ];
+
     constructor(private accountsService: AccountService, private jwtTokenService: JwtService){}
 
     async validateCredentials(username: string, password: string): Promise<any> {
@@ -22,9 +27,19 @@ export class AuthService {
             throw new NotAcceptableException("Contraseña incorrecta");
         }
 
-        return 
+        if( account && passwordValid){
+            return account;
+        }
+
+        return null;
     }
 
+    validateApiKey(apiKey: string) {
+        return this.apiKeys.find(apiK => apiKey === apiK);
+        }
+        
+
+   
     async loginWithCredentials(user: any) {
         const payload = { username: user.username, sub: user.userId };
 
