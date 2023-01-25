@@ -9,13 +9,15 @@ export class AccountController {
     constructor(private readonly usersService: AccountService) { }
 
     @Post('/signup')
-    @UseGuards(AuthGuard("api-key"))
+    //@UseGuards(AuthGuard("local"))
     async createAccount(
         @Body('password') password: string,
         @Body('username') username: string,
     ): Promise<Account> {
         const saltOrRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltOrRounds);
+        console.log('#######################');
+        
         const result = await this.usersService.createAccount(
             username,
             hashedPassword,

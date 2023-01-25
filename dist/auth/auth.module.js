@@ -11,6 +11,7 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const mongoose_1 = require("@nestjs/mongoose");
 const passport_1 = require("@nestjs/passport");
+const account_service_1 = require("../account/account.service");
 const account_schema_1 = require("../schemas/account.schema");
 const account_module_1 = require("../account/account.module");
 const apiKey_strategy_1 = require("./apiKey.strategy");
@@ -28,7 +29,7 @@ AuthModule = __decorate([
                 signOptions: { expiresIn: '1d' },
             }),
             mongoose_1.MongooseModule.forFeature([{ name: "account", schema: account_schema_1.AccountSchema }])],
-        providers: [auth_service_1.AuthService, local_strategy_1.LocalStrategy, jwt_strategy_1.JwtStrategy, apiKey_strategy_1.ApiKeyStrategy],
+        providers: [account_service_1.AccountService, auth_service_1.AuthService, local_strategy_1.LocalStrategy, jwt_strategy_1.JwtStrategy, apiKey_strategy_1.ApiKeyStrategy],
         controllers: [auth_controller_1.AuthController],
     })
 ], AuthModule);

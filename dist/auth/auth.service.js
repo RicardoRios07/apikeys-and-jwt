@@ -27,7 +27,7 @@ let AuthService = class AuthService {
         const account = await this.accountsService.getAccount({ username });
         console.log(account);
         if (!account) {
-            throw new common_1.NotAcceptableException("No se pudo encontrar e usuario");
+            throw new common_1.NotAcceptableException("No se pudo encontrar el usuario");
         }
         const passwordValid = await bcrypt.compare(password, account.password);
         console.log(passwordValid);
@@ -37,13 +37,12 @@ let AuthService = class AuthService {
         if (account && passwordValid) {
             return account;
         }
-        return null;
     }
     validateApiKey(apiKey) {
         return this.apiKeys.find(apiK => apiKey === apiK);
     }
-    async loginWithCredentials(user) {
-        const payload = { username: user.username, sub: user.userId };
+    async loginWithCredentials(account) {
+        const payload = { username: account.username, sub: account.userId };
         return {
             access_token: this.jwtTokenService.sign(payload),
         };

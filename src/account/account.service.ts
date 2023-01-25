@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, sanitizeFilter } from "mongoose";
-import { Account, AccountDocument, AccountSchema } from "../schemas/account.schema";
+import { Model } from "mongoose";
+import { Account, AccountDocument } from "../schemas/account.schema";
 
 
 @Injectable()
@@ -9,7 +9,7 @@ export class AccountService {
   constructor(@InjectModel("account") private readonly AccountModel: Model <AccountDocument>){ }
 
   async createAccount(username: string, password: string): Promise<Account> {
-    console.log(password);
+    console.log('********************************',password);
 
     return this.AccountModel.create({
       username,

@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common"
 import { JwtModule } from "@nestjs/jwt";
 import { MongooseModule } from "@nestjs/mongoose";
 import { PassportModule } from "@nestjs/passport";
+import { AccountService } from "src/account/account.service";
 import { AccountSchema } from "src/schemas/account.schema";
 import { AccountModule } from "../account/account.module";
 import { ApiKeyStrategy } from "./apiKey.strategy";
@@ -18,7 +19,7 @@ import { LocalStrategy } from "./local.strategy";
         signOptions: { expiresIn: '1d' },
   }), 
   MongooseModule.forFeature([{ name: "account", schema: AccountSchema }])],
-  providers: [AuthService, LocalStrategy, JwtStrategy, ApiKeyStrategy],
+  providers: [AccountService,AuthService, LocalStrategy, JwtStrategy, ApiKeyStrategy],
   controllers: [AuthController],
 })
 export class AuthModule { }

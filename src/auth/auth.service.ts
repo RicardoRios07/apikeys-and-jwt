@@ -10,14 +10,14 @@ export class AuthService {
         "d2e621a6646a4211768cd68e26f21228a81",
     ];
 
-    constructor(private accountsService: AccountService, private jwtTokenService: JwtService){}
+    constructor(private readonly accountsService: AccountService, private jwtTokenService: JwtService){}
 
     async validateCredentials(username: string, password: string): Promise<any> {
         const account = await this.accountsService.getAccount({username});
         console.log(account);
 
         if(!account) {
-            throw new NotAcceptableException("No se pudo encontrar e usuario");
+            throw new NotAcceptableException("No se pudo encontrar el usuario");
         }
 
         const passwordValid = await bcrypt.compare(password, account.password)
@@ -30,8 +30,6 @@ export class AuthService {
         if( account && passwordValid){
             return account;
         }
-
-        return null;
     }
 
     validateApiKey(apiKey: string) {
@@ -40,8 +38,8 @@ export class AuthService {
         
 
    
-    async loginWithCredentials(user: any) {
-        const payload = { username: user.username, sub: user.userId };
+    async loginWithCredentials(account: any) {
+        const payload = { username: account.username, sub: account.userId };
 
         return {
             access_token: this.jwtTokenService.sign(payload),

@@ -16,7 +16,6 @@ exports.AccountController = void 0;
 const common_1 = require("@nestjs/common");
 const account_service_1 = require("./account.service");
 const bcrypt = require("bcrypt");
-const passport_1 = require("@nestjs/passport");
 let AccountController = class AccountController {
     constructor(usersService) {
         this.usersService = usersService;
@@ -24,13 +23,13 @@ let AccountController = class AccountController {
     async createAccount(password, username) {
         const saltOrRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltOrRounds);
+        console.log('#######################');
         const result = await this.usersService.createAccount(username, hashedPassword);
         return result;
     }
 };
 __decorate([
     (0, common_1.Post)('/signup'),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)("api-key")),
     __param(0, (0, common_1.Body)('password')),
     __param(1, (0, common_1.Body)('username')),
     __metadata("design:type", Function),

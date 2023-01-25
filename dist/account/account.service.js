@@ -21,7 +21,7 @@ let AccountService = class AccountService {
         this.AccountModel = AccountModel;
     }
     async createAccount(username, password) {
-        console.log(password);
+        console.log('********************************', password);
         return this.AccountModel.create({
             username,
             password,
