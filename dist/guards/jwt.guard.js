@@ -6,23 +6,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthMiddleware = void 0;
+exports.JwtAuthGuard = void 0;
 const common_1 = require("@nestjs/common");
-const passport = require("passport");
-let AuthMiddleware = class AuthMiddleware {
-    use(req, res, next) {
-        passport.authenticate("headerapikey", { session: false, failureRedirect: "/api/unauthorized" }, value => {
-            if (value) {
-                next();
-            }
-            else {
-                throw new common_1.UnauthorizedException();
-            }
-        })(req, res, next);
-    }
+const passport_1 = require("@nestjs/passport");
+let JwtAuthGuard = class JwtAuthGuard extends (0, passport_1.AuthGuard)('jwt') {
 };
-AuthMiddleware = __decorate([
+JwtAuthGuard = __decorate([
     (0, common_1.Injectable)()
-], AuthMiddleware);
-exports.AuthMiddleware = AuthMiddleware;
-//# sourceMappingURL=auth.middleware.js.map
+], JwtAuthGuard);
+exports.JwtAuthGuard = JwtAuthGuard;
+//# sourceMappingURL=jwt.guard.js.map

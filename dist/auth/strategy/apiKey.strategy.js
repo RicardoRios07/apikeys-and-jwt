@@ -9,27 +9,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LocalStrategy = void 0;
-const passport_local_1 = require("passport-local");
+exports.ApiKeyStrategy = void 0;
+const passport_headerapikey_1 = require("passport-headerapikey");
 const passport_1 = require("@nestjs/passport");
 const common_1 = require("@nestjs/common");
-const auth_service_1 = require("./auth.service");
-let LocalStrategy = class LocalStrategy extends (0, passport_1.PassportStrategy)(passport_local_1.Strategy) {
+const auth_service_1 = require("../auth.service");
+let ApiKeyStrategy = class ApiKeyStrategy extends (0, passport_1.PassportStrategy)(passport_headerapikey_1.HeaderAPIKeyStrategy) {
     constructor(authService) {
-        super();
+        super({ header: "apiKey", prefix: "" }, true, (apikey, done, req) => {
+            const checkKey = authService.validateApiKey(apikey);
+            if (!checkKey) {
+                return done(false);
+            }
+            return done(true);
+        });
         this.authService = authService;
     }
-    async validate(username, password) {
-        const user = await this.authService.validateCredentials(username, password);
-        if (!user) {
-            throw new common_1.UnauthorizedException();
-        }
-        return user;
-    }
 };
-LocalStrategy = __decorate([
+ApiKeyStrategy = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [auth_service_1.AuthService])
-], LocalStrategy);
-exports.LocalStrategy = LocalStrategy;
-//# sourceMappingURL=local.strategy.js.map
+], ApiKeyStrategy);
+exports.ApiKeyStrategy = ApiKeyStrategy;
+//# sourceMappingURL=apiKey.strategy.js.map

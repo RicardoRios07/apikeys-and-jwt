@@ -21,8 +21,8 @@ let AuthController = class AuthController {
         this.authService = authService;
     }
     async login(req) {
-        console.log(req.account);
-        return this.authService.loginWithCredentials(req.account);
+        console.log(req.user);
+        return this.authService.login(req.user);
     }
 };
 __decorate([

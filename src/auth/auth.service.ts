@@ -1,7 +1,7 @@
 import { Injectable, NotAcceptableException } from '@nestjs/common';
+import { AccountService } from "../account/account.service";
+import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { AccountService } from '../account/account.service';
-import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class AuthService {
@@ -10,39 +10,35 @@ export class AuthService {
         "d2e621a6646a4211768cd68e26f21228a81",
     ];
 
-    constructor(private readonly accountsService: AccountService, private jwtTokenService: JwtService){}
+    constructor(private readonly accountsService: AccountService, private jwtService: JwtService) { }
 
-    async validateCredentials(username: string, password: string): Promise<any> {
-        const account = await this.accountsService.getAccount({username});
-        console.log(account);
-
-        if(!account) {
-            throw new NotAcceptableException("No se pudo encontrar el usuario");
+    async validateCredentials(email: string, password: string): Promise<any> {
+        const user = await this.accountsService.getAccount({ email });
+        console.log(user);
+        
+        if (!user) {
+            throw new NotAcceptableException('No se pudo encontrar la cuenta');
         }
-
-        const passwordValid = await bcrypt.compare(password, account.password)
+        
+        const passwordValid = await bcrypt.compare(password, user.password)
         console.log(passwordValid);
-
-        if(!passwordValid) {
-            throw new NotAcceptableException("Contraseña incorrecta");
+        
+        if (!passwordValid) {
+            throw new NotAcceptableException('Contraseña incorrecta');
         }
-
-        if( account && passwordValid){
-            return account;
-        }
+        return user;
     }
 
     validateApiKey(apiKey: string) {
         return this.apiKeys.find(apiK => apiKey === apiK);
-        }
-        
+    }
 
-   
-    async loginWithCredentials(account: any) {
-        const payload = { username: account.username, sub: account.userId };
 
+    async login(user: any) {
+        const payload = { email: user.email, sub: user.Id };
         return {
-            access_token: this.jwtTokenService.sign(payload),
+            access_token: this.jwtService.sign(payload),          
         };
+        
     }
 }

@@ -8,28 +8,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthModule = void 0;
 const common_1 = require("@nestjs/common");
-const jwt_1 = require("@nestjs/jwt");
-const mongoose_1 = require("@nestjs/mongoose");
-const passport_1 = require("@nestjs/passport");
-const account_service_1 = require("../account/account.service");
-const account_schema_1 = require("../schemas/account.schema");
 const account_module_1 = require("../account/account.module");
-const apiKey_strategy_1 = require("./apiKey.strategy");
-const auth_controller_1 = require("./auth.controller");
 const auth_service_1 = require("./auth.service");
+const passport_1 = require("@nestjs/passport");
+const jwt_1 = require("@nestjs/jwt");
+const account_service_1 = require("../account/account.service");
+const mongoose_1 = require("@nestjs/mongoose");
+const account_schema_1 = require("../schemas/account.schema");
+const auth_controller_1 = require("./auth.controller");
 const constants_1 = require("./constants");
-const jwt_strategy_1 = require("./jwt.strategy");
-const local_strategy_1 = require("./local.strategy");
+const jwt_strategy_1 = require("./strategy/jwt.strategy");
+const local_strategy_1 = require("./strategy/local.strategy");
 let AuthModule = class AuthModule {
 };
 AuthModule = __decorate([
     (0, common_1.Module)({
-        imports: [account_module_1.AccountModule, passport_1.PassportModule, passport_1.PassportModule, jwt_1.JwtModule.register({
+        imports: [account_module_1.AccountModule, passport_1.PassportModule, jwt_1.JwtModule.register({
                 secret: constants_1.jwtConstants.secret,
                 signOptions: { expiresIn: '1d' },
-            }),
-            mongoose_1.MongooseModule.forFeature([{ name: "account", schema: account_schema_1.AccountSchema }])],
-        providers: [account_service_1.AccountService, auth_service_1.AuthService, local_strategy_1.LocalStrategy, jwt_strategy_1.JwtStrategy, apiKey_strategy_1.ApiKeyStrategy],
+            }), mongoose_1.MongooseModule.forFeature([{ name: "account", schema: account_schema_1.AccountSchema }])],
+        providers: [auth_service_1.AuthService, account_service_1.AccountService, local_strategy_1.LocalStrategy, jwt_strategy_1.JwtStrategy],
         controllers: [auth_controller_1.AuthController],
     })
 ], AuthModule);

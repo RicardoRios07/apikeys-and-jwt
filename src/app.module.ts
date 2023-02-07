@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { AccountModule } from './account/account.module';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AuthMiddleware } from './middleware/auth/auth.middleware';
 
 @Module({
   imports: [AccountModule, AuthModule,
@@ -18,7 +17,4 @@ import { AuthMiddleware } from './middleware/auth/auth.middleware';
 })
 export class AppModule {
 
-  configure (consumer: MiddlewareConsumer){
-    consumer.apply(AuthMiddleware).forRoutes("");
-  }
 }

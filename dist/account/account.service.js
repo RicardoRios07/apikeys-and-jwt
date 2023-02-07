@@ -20,16 +20,19 @@ let AccountService = class AccountService {
     constructor(AccountModel) {
         this.AccountModel = AccountModel;
     }
-    async createAccount(username, password) {
+    async createAccount(email, password) {
         console.log('********************************', password);
         return this.AccountModel.create({
-            username,
+            email,
             password,
         });
     }
     async getAccount(query) {
         console.log(query);
         return this.AccountModel.findOne(query);
+    }
+    async getAccounts() {
+        return await this.AccountModel.find().lean().exec();
     }
 };
 AccountService = __decorate([

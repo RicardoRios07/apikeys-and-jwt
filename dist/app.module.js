@@ -13,11 +13,7 @@ const app_service_1 = require("./app.service");
 const account_module_1 = require("./account/account.module");
 const auth_module_1 = require("./auth/auth.module");
 const mongoose_1 = require("@nestjs/mongoose");
-const auth_middleware_1 = require("./middleware/auth/auth.middleware");
 let AppModule = class AppModule {
-    configure(consumer) {
-        consumer.apply(auth_middleware_1.AuthMiddleware).forRoutes("");
-    }
 };
 AppModule = __decorate([
     (0, common_1.Module)({

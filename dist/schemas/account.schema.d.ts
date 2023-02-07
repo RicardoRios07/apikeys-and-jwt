@@ -22,11 +22,13 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import { Document } from "mongoose";
+import { Document, Schema as MongooseSchema } from "mongoose";
+import { User } from "./user.schema";
 export type AccountDocument = Account & Document;
 export declare class Account {
-    id: number;
-    username: string;
+    email: string;
     password: string;
+    active_account: boolean;
+    user: User;
 }
-export declare const AccountSchema: import("mongoose").Schema<Account, import("mongoose").Model<Account, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Account>;
+export declare const AccountSchema: MongooseSchema<Account, import("mongoose").Model<Account, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Account>;

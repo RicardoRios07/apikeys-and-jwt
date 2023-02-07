@@ -1,25 +1,24 @@
 import { Module } from "@nestjs/common"
-import { JwtModule } from "@nestjs/jwt";
-import { MongooseModule } from "@nestjs/mongoose";
-import { PassportModule } from "@nestjs/passport";
-import { AccountService } from "src/account/account.service";
-import { AccountSchema } from "src/schemas/account.schema";
 import { AccountModule } from "../account/account.module";
-import { ApiKeyStrategy } from "./apiKey.strategy";
-import { AuthController } from "./auth.controller";
-import { AuthService } from "./auth.service";
+import { AuthService } from "./auth.service"
+import { PassportModule } from "@nestjs/passport"
+import { JwtModule } from '@nestjs/jwt';
+import { AccountService } from "../account/account.service";
+import { MongooseModule } from "@nestjs/mongoose"
+import { AccountSchema } from "../schemas/account.schema"
+import { AuthController } from './auth.controller';
 import { jwtConstants } from "./constants";
-import { JwtStrategy } from "./jwt.strategy";
-import { LocalStrategy } from "./local.strategy";
+import { JwtStrategy } from "./strategy/jwt.strategy";
+import { LocalStrategy } from "./strategy/local.strategy";
+
 
 
 @Module({
-  imports: [AccountModule, PassportModule,PassportModule, JwtModule.register({
-        secret: jwtConstants.secret,
-        signOptions: { expiresIn: '1d' },
-  }), 
-  MongooseModule.forFeature([{ name: "account", schema: AccountSchema }])],
-  providers: [AccountService,AuthService, LocalStrategy, JwtStrategy, ApiKeyStrategy],
+  imports: [AccountModule, PassportModule, JwtModule.register({
+    secret:  jwtConstants.secret,
+    signOptions: { expiresIn: '1d' },
+  }), MongooseModule.forFeature([{ name: "account", schema: AccountSchema }])],
+  providers: [AuthService, AccountService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],
 })
 export class AuthModule { }

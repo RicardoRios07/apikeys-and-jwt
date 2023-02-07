@@ -11,40 +11,38 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
-const jwt_1 = require("@nestjs/jwt");
 const account_service_1 = require("../account/account.service");
 const bcrypt = require("bcrypt");
+const jwt_1 = require("@nestjs/jwt");
 let AuthService = class AuthService {
-    constructor(accountsService, jwtTokenService) {
+    constructor(accountsService, jwtService) {
         this.accountsService = accountsService;
-        this.jwtTokenService = jwtTokenService;
+        this.jwtService = jwtService;
         this.apiKeys = [
             "ca03na188ame03u1d78620de67282882a84",
             "d2e621a6646a4211768cd68e26f21228a81",
         ];
     }
-    async validateCredentials(username, password) {
-        const account = await this.accountsService.getAccount({ username });
-        console.log(account);
-        if (!account) {
-            throw new common_1.NotAcceptableException("No se pudo encontrar el usuario");
+    async validateCredentials(email, password) {
+        const user = await this.accountsService.getAccount({ email });
+        console.log(user);
+        if (!user) {
+            throw new common_1.NotAcceptableException('No se pudo encontrar la cuenta');
         }
-        const passwordValid = await bcrypt.compare(password, account.password);
+        const passwordValid = await bcrypt.compare(password, user.password);
         console.log(passwordValid);
         if (!passwordValid) {
-            throw new common_1.NotAcceptableException("Contraseña incorrecta");
+            throw new common_1.NotAcceptableException('Contraseña incorrecta');
         }
-        if (account && passwordValid) {
-            return account;
-        }
+        return user;
     }
     validateApiKey(apiKey) {
         return this.apiKeys.find(apiK => apiKey === apiK);
     }
-    async loginWithCredentials(account) {
-        const payload = { username: account.username, sub: account.userId };
+    async login(user) {
+        const payload = { email: user.email, sub: user.Id };
         return {
-            access_token: this.jwtTokenService.sign(payload),
+            access_token: this.jwtService.sign(payload),
         };
     }
 };

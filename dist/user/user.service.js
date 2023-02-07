@@ -8,27 +8,34 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ApiKeyStrategy = void 0;
-const passport_headerapikey_1 = require("passport-headerapikey");
-const passport_1 = require("@nestjs/passport");
+exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
-const auth_service_1 = require("../auth/auth.service");
-let ApiKeyStrategy = class ApiKeyStrategy extends (0, passport_1.PassportStrategy)(passport_headerapikey_1.HeaderAPIKeyStrategy) {
-    constructor(authService) {
-        super({ header: "apiKey", prefix: "" }, true, (apikey, done, req) => {
-            const checkKey = authService.validateApiKey(apikey);
-            if (!checkKey) {
-                return done(false);
-            }
-            return done(true);
+const mongoose_1 = require("@nestjs/mongoose");
+const mongoose_2 = require("mongoose");
+let UserService = class UserService {
+    constructor(userModel) {
+        this.userModel = userModel;
+    }
+    async createUser(username, password) {
+        console.log(password);
+        return this.userModel.create({
+            username,
+            password,
         });
-        this.authService = authService;
+    }
+    async findOne(query) {
+        console.log(query);
+        return this.userModel.findOne(query);
     }
 };
-ApiKeyStrategy = __decorate([
+UserService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [auth_service_1.AuthService])
-], ApiKeyStrategy);
-exports.ApiKeyStrategy = ApiKeyStrategy;
-//# sourceMappingURL=apiKey.strategy.js.map
+    __param(0, (0, mongoose_1.InjectModel)('user')),
+    __metadata("design:paramtypes", [mongoose_2.Model])
+], UserService);
+exports.UserService = UserService;
+//# sourceMappingURL=user.service.js.map

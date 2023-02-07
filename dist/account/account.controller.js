@@ -16,28 +16,39 @@ exports.AccountController = void 0;
 const common_1 = require("@nestjs/common");
 const account_service_1 = require("./account.service");
 const bcrypt = require("bcrypt");
+const passport_1 = require("@nestjs/passport");
 let AccountController = class AccountController {
     constructor(usersService) {
         this.usersService = usersService;
     }
-    async createAccount(password, username) {
+    async createAccount(password, email) {
         const saltOrRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltOrRounds);
-        console.log('#######################');
-        const result = await this.usersService.createAccount(username, hashedPassword);
+        console.log('CREANDO CUENTA');
+        const result = await this.usersService.createAccount(email, hashedPassword);
         return result;
+    }
+    async getAccounts() {
+        return this.usersService.getAccounts();
     }
 };
 __decorate([
     (0, common_1.Post)('/signup'),
     __param(0, (0, common_1.Body)('password')),
-    __param(1, (0, common_1.Body)('username')),
+    __param(1, (0, common_1.Body)('email')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], AccountController.prototype, "createAccount", null);
+__decorate([
+    (0, common_1.Get)(),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AccountController.prototype, "getAccounts", null);
 AccountController = __decorate([
-    (0, common_1.Controller)(),
+    (0, common_1.Controller)('account'),
     __metadata("design:paramtypes", [account_service_1.AccountService])
 ], AccountController);
 exports.AccountController = AccountController;

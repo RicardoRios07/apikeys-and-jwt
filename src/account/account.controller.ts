@@ -3,8 +3,9 @@ import { AccountService } from './account.service';
 import { Account } from '../schemas/account.schema';
 import * as bcrypt from 'bcrypt';
 import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
 
-@Controller()
+@Controller('account')
 export class AccountController {
     constructor(private readonly usersService: AccountService) { }
 
@@ -12,17 +13,24 @@ export class AccountController {
     //@UseGuards(AuthGuard("local"))
     async createAccount(
         @Body('password') password: string,
-        @Body('username') username: string,
+        @Body('email') email: string,
     ): Promise<Account> {
         const saltOrRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltOrRounds);
-        console.log('#######################');
+        console.log('CREANDO CUENTA');
         
         const result = await this.usersService.createAccount(
-            username,
+            email,
             hashedPassword,
         );
         return result;
+    }
+
+    @Get()
+    @UseGuards(AuthGuard('jwt'))
+    async getAccounts(
+    ) {
+        return this.usersService.getAccounts()
     }
     
 }
